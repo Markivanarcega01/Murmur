@@ -12,6 +12,7 @@ import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
 import GifIcon from '@mui/icons-material/Gif';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ChatBlock from './components/ChatBlock';
+import ChatBlockInformation from './components/ChatBlockInformation';
 
 function App() {
   const [data,setData] = useState()
@@ -172,7 +173,9 @@ function App() {
         </div>
 
         {/** Component 3*/}
-        <div className='bg-red-300 basis-1/4'>Component 3: Info about Conversation</div>
+        <div className='bg-red-300 basis-1/4'>
+              <ChatBlockInformation/>
+        </div>
       </div>
     </>
   )
