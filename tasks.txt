@@ -2,8 +2,8 @@ Frontend
 1. Finish registration page
 
 Backend
-1. User model
-2. Authentication, Authorization
+1. User model (Done)
+2. Authentication, Authorization (JWT)
 3. API limiter(leaky bucket)
 4. Websocket API for Realtime messenging
 5. Unit testing
