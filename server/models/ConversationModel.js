@@ -6,6 +6,6 @@ class Conversation extends Model { }
 Conversation.init({
     id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
     name: { type: DataTypes.STRING, allowNull: true }
-}, { sequelize, modelName: "Conversation" })
+}, { sequelize, modelName: "Conversation", tableName:'conversations' })
 
 module.exports = Conversation;
