@@ -19,6 +19,9 @@ module.exports = {
         type: Sequelize.TEXT,
         allowNull: false,
       },
+      senderId:{
+        type:Sequelize.INTEGER
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
