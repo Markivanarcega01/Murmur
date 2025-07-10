@@ -25,4 +25,4 @@ Conversation.belongsToMany(User, {
     as: 'participants'
 })
 
-module.exports = { sequelize, User, Message, Conversation, ConversationParticipant };
+module.exports = {User, Message, Conversation, ConversationParticipant };
