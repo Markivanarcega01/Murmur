@@ -18,3 +18,6 @@ Core feature
 2. Make API for creating conversations, ConversationParticipants, and Messages
 3. Use Socket.io for real-time messaging
 4. Make the API protected
+
+
+When sending a message to a user, this creates a conversation instance, conversationParticipants instance and message instance
