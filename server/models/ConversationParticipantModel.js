@@ -5,7 +5,7 @@ class ConversationParticipant extends Model{}
 
 ConversationParticipant.init({
     id: {type: DataTypes.INTEGER, autoIncrement:true, primaryKey:true}
-}, {sequelize, modelName:"ConversationParticipant", tableName:'conversation_participants'})
+}, {sequelize, modelName:"ConversationParticipant", tableName:'conversation_participants', timestamps:true})
 
 module.exports = ConversationParticipant;
 
