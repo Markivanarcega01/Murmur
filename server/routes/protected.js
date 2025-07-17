@@ -4,10 +4,10 @@ const {showMessages, createMessage, updateMessage, destroyMessage } = require('.
 const {showConversations} = require("../controllers/ConversationController")
 
 //Messages Routes
-router.get("/show-messages/:conversationId", show);
-router.post("/create-message", create);
-router.put("/update-message", update);
-router.delete("/delete-message", destroy);
+router.get("/show-messages/:conversationId", showMessages);
+router.post("/create-message", createMessage);
+router.put("/update-message", updateMessage);
+router.delete("/delete-message", destroyMessage);
 
 //Conversation Routes
 router.get("/show-conversations", showConversations)
