@@ -1,6 +1,6 @@
 const { Message} = require('../models/associations')
 
-const showMessages = async (req, res) => {
+const show = async (req, res) => {
     try {
         const {conversationId} = req.params
         const messages = await Message.findAll({
@@ -14,7 +14,7 @@ const showMessages = async (req, res) => {
     }
 }
 
-const createMessage = async (req, res) => {
+const create = async (req, res) => {
     try {
         const message = await Message.create(req.body)
         return res.status(200).json(message)
@@ -23,7 +23,7 @@ const createMessage = async (req, res) => {
     }
 }
 
-const updateMessage = async (req, res) => {
+const update = async (req, res) => {
     try {
         //senderId, conversationId, createdAt
         const { senderId, conversationId, createdAt, text } = req.body
@@ -42,7 +42,7 @@ const updateMessage = async (req, res) => {
     }
 }
 
-const deleteMessage = async (req, res) => {
+const destroy = async (req, res) => {
     try{
         const {senderId, conversationId, createdAt} = req.body
         const message = await Message.destroy({
@@ -60,4 +60,4 @@ const deleteMessage = async (req, res) => {
 
 
 
-module.exports = { createMessage, updateMessage, deleteMessage, showMessages }
+module.exports = { show, create, update, destroy}

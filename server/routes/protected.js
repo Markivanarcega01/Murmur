@@ -1,10 +1,11 @@
 const express = require("express")
 const router = express.Router()
-const {createMessage, updateMessage, deleteMessage, showMessages} = require('../controllers/MessageController')
+const {show, create, update, destroy} = require('../controllers/MessageController')
 
-router.get("/show-messages/:conversationId", showMessages);
-router.post("/create-message", createMessage);
-router.put("/update-message", updateMessage);
-router.delete("/delete-message", deleteMessage);
+//Messages Routes
+router.get("/show-messages/:conversationId", show);
+router.post("/create-message", create);
+router.put("/update-message", update);
+router.delete("/delete-message", destroy);
 
 module.exports = router
