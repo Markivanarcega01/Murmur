@@ -14,7 +14,7 @@ Backend
 5. Unit testing
 
 Core feature
-1. Model and Controller for Conversations, ConversationParticipants, Messages
+1. Model and Controller for Conversations, ConversationParticipants, Messages (done)
 2. Make API for creating conversations, ConversationParticipants, and Messages
 3. Use Socket.io for real-time messaging
 4. Make the API protected
