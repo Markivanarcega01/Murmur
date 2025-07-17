@@ -26,14 +26,12 @@ const createMessage = async (req, res) => {
 const updateMessage = async (req, res) => {
     try {
         //senderId, conversationId, createdAt
-        const { senderId, conversationId, createdAt, text } = req.body
+        const { id, text } = req.body
         const message = await Message.update(
             { text: text },
             {
                 where: {
-                    senderId: senderId,
-                    conversationId: conversationId,
-                    createdAt:createdAt
+                    id:id
                 }
             })
         return res.status(200).json(message)
