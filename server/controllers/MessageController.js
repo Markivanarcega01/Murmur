@@ -19,6 +19,11 @@ const createMessage = async (req, res) => {
         const message = await Message.create(req.body)
         return res.status(200).json(message)
     } catch (error) {
+        if(error.name == "SequelizeForeignKeyConstraintError"){
+            return res.status(400).json({
+                error: "Sender does not exists"
+            })
+        }
         return res.status(500).json(error)
     }
 }
