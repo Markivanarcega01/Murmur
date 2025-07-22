@@ -1,5 +1,6 @@
 const { Message} = require('../models/associations')
 
+//Show messages of a conversation room
 const showMessages = async (req, res) => {
     try {
         const {id} = req.params
@@ -10,6 +11,7 @@ const showMessages = async (req, res) => {
         })
         return res.status(200).json(messages)
     } catch (error) {
+
         return res.status(500).json(error)
     }
 }
