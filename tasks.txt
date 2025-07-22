@@ -19,5 +19,8 @@ Core feature
 3. Use Socket.io for real-time messaging
 4. Make the API protected
 
+Middleware:
+1. User can only see conversation/message, if userId is associated
+2. No duplicate userId when associated with conversation
 
 When sending a message to a user, this creates a conversation instance, conversationParticipants instance and message instance
