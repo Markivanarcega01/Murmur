@@ -1,18 +1,35 @@
-const { Message} = require('../models/associations')
+const {User,Message, ConversationParticipant} = require('../models/associations')
 
 //Show messages of a conversation room
 const showMessages = async (req, res) => {
     try {
         const {id} = req.params
+
+        //Check if the user is in the conversation room
+        const userId = req.user.id
+        const isParticipant = await ConversationParticipant.findOne({
+            where:{
+                userId:userId,
+                conversationId:id
+            }
+        })
+        if(!isParticipant){
+            return res.status(403).json({
+                message: "Access Denied"
+            })
+        }
+
+        //Show the message of the conversation
         const messages = await Message.findAll({
             where:{
                 conversationId: id,
-            }
+            },
+            include:[{model:User, attributes:['username']}]
         })
         return res.status(200).json(messages)
     } catch (error) {
 
-        return res.status(500).json(error)
+        return res.status(500).json({ message: "Server Error", error: error.message })
     }
 }
 
