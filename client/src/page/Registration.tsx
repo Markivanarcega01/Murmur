@@ -32,7 +32,7 @@ function Registration() {
     return (
         <>
             <div className="flex flex-col items-center bg-slate-200 h-screen pt-10">
-                <Typography variant="h3" fontWeight={"bold"} color="primary">facebook</Typography>
+                <Typography variant="h3" fontWeight={"bold"} color="primary">Murmur</Typography>
                 <Grid2 container spacing={1}
                     sx={{ backgroundColor: "white", padding: "20px", marginTop: "20px", border: "1px solid", borderRadius: "5px", width: "400px" }}>
                     <Grid2 size={12} sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
