@@ -87,7 +87,7 @@ User.createUser = async (credentials) => {
 }
 
 
-User.prototype.createJWT = () =>{
+User.prototype.createJWT = function(){
     return jwt.sign(
         {id:this.id, username:this.username},
         process.env.JWT_SECRET,
