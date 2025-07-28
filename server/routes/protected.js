@@ -3,6 +3,10 @@ const router = express.Router()
 const {showMessages, createMessage, updateMessage, destroyMessage } = require('../controllers/MessageController')
 const {showConversations, createConversation, updateConvesation, deleteConversation} = require("../controllers/ConversationController");
 const { showConversationParticipants, createConversationParticipants, updateConversationParticipants, deleteConversationParticipants, findConversationParticipants } = require("../controllers/ConversationParticipantController");
+const { getUsers } = require("../controllers/UserController");
+
+//Users Routes
+router.get("/get-users", getUsers)
 
 //Messages Routes
 router.get("/show-messages/:id", showMessages);
