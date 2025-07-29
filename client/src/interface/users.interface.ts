@@ -12,3 +12,8 @@ export interface UsersDataProps {
   updatedAt: string;
   Messages: MessageProps[];
 }
+
+export interface UserLoginDataProps {
+  username: string;
+  password: string;
+}

@@ -15,34 +15,24 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { userService } from "../services/user.service";
 import { ConversationMessagesDataProps } from "../interface/conversations.interface";
+import { messageService } from "../services/message.service";
 
 const { getUsers } = userService();
+const { getMessages } = messageService();
 
 function Message() {
-  const [selected, setSelected] = useState<number | null>(1);
+  const [selected, setSelected] = useState<number>(1);
   {
     /** Fetch Users */
   }
   const { data, isLoading } = getUsers();
+  const { data: messages, isLoading: messageLoading } = getMessages(selected);
 
   console.log(selected);
 
   {
     /** Fetch Messages */
   }
-  const { data: messages, isLoading: messageLoading } = useQuery<
-    ConversationMessagesDataProps[]
-  >({
-    queryKey: ["messages"],
-    queryFn: async () => {
-      const response = await fetch(
-        `http://127.0.0.1:3000/api/v1/show-messages/${selected}`
-      );
-      return response.json();
-    },
-  });
-
-  console.log(messages);
 
   const [isScrolled, setIsScrolled] = useState(false);
 

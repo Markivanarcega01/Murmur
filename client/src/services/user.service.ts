@@ -1,9 +1,9 @@
-import { useQuery } from "@tanstack/react-query";
+import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
 import { UsersDataProps } from "../interface/users.interface";
 import { USER_QUERYKEY } from "../shared/const/user.querykeys";
 import { usersApi } from "../api/users.api";
 
-const { getUsersApi } = usersApi();
+const { getUsersApi, loginUsersApi } = usersApi();
 
 export const userService = () => {
   const getUsers = () => {
@@ -13,5 +13,12 @@ export const userService = () => {
     });
   };
 
-  return { getUsers };
+  const loginUser = () => {
+    return useMutation({
+      mutationKey: [USER_QUERYKEY.login],
+      mutationFn: loginUsersApi,
+    });
+  };
+
+  return { getUsers, loginUser };
 };

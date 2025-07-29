@@ -8,10 +8,9 @@ const {
 const showMessages = async (req, res) => {
   try {
     const { id } = req.params;
-
     //Check if the user is in the conversation room
     const userId = req.user.id;
-    //const userId = 1
+    //const userId = 1;
     const isParticipant = await ConversationParticipant.findOne({
       where: {
         userId: userId,

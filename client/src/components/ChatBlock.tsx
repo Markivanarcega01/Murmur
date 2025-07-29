@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { ConversationDataProps } from "../page/Message";
+import { ConversationMessagesDataProps } from "../interface/conversations.interface";
 
 function ChatBlock({
   conversationMessages,
 }: {
-  conversationMessages: ConversationDataProps[];
+  conversationMessages: ConversationMessagesDataProps[];
 }) {
   const [isUser, SetIsUser] = useState(false);
   const dummyData = [
