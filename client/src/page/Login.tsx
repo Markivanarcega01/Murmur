@@ -11,10 +11,31 @@ function Login() {
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
 
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    login.mutate(
+      {
+        username: username,
+        password: password,
+      },
+      {
+        onSuccess: (data) => {
+          sessionStorage.setItem("token", data.token);
+          console.log("Login successful:", data);
+          navigate("/");
+        },
+        onError: (error: any) => {
+          console.log("Login failed", error);
+        },
+      }
+    );
+  };
+
   console.log(login);
 
   return (
-    <>
+    <form onSubmit={handleLogin}>
       <Grid2 container sx={{ height: "100vh", bgcolor: "#E2E8F0" }}>
         <Grid2
           size={{ xs: 12, md: 7 }}
@@ -86,27 +107,11 @@ function Login() {
             </Grid2>
             <Grid2 size={12}>
               <Button
+                type="submit"
                 variant="contained"
                 fullWidth
                 size="large"
                 sx={{ fontWeight: "bold" }}
-                onClick={() => {
-                  login.mutate(
-                    {
-                      username: username,
-                      password: password,
-                    },
-                    {
-                      onSuccess: (data) => {
-                        sessionStorage.setItem("token", data.token);
-                        console.log("Login successful:", data);
-                      },
-                      onError: (error: any) => {
-                        console.log("Login failed", error);
-                      },
-                    }
-                  );
-                }}
               >
                 Login
               </Button>
@@ -126,7 +131,7 @@ function Login() {
           </Grid2>
         </Grid2>
       </Grid2>
-    </>
+    </form>
   );
 }
 

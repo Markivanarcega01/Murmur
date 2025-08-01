@@ -12,10 +12,9 @@ import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ChatBlock from "../components/ChatBlock";
 import ChatBlockInformation from "../components/ChatBlockInformation";
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
 import { userService } from "../services/user.service";
-import { ConversationMessagesDataProps } from "../interface/conversations.interface";
 import { messageService } from "../services/message.service";
+import { Navigate } from "react-router";
 
 const { getUsers } = userService();
 const { getMessages } = messageService();
@@ -25,10 +24,16 @@ function Message() {
   {
     /** Fetch Users */
   }
-  const { data, isLoading } = getUsers();
-  const { data: messages, isLoading: messageLoading } = getMessages(selected);
+  const { data, isLoading, isError } = getUsers();
+  const {
+    data: messages,
+    isLoading: messageLoading,
+    error,
+  } = getMessages(selected);
 
-  console.log(selected);
+  console.log(isError);
+  console.log(error);
+  console.log(messages);
 
   {
     /** Fetch Messages */
@@ -127,7 +132,9 @@ function Message() {
       lastConvo: "This is a sample1 convo",
     },
   ];
-
+  if (isError) {
+    return <Navigate to={"/login"} />;
+  }
   return (
     <>
       <div className="flex flex-row h-screen">
@@ -157,9 +164,9 @@ function Message() {
                 >
                   <path
                     stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
                     d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
                   />
                 </svg>
