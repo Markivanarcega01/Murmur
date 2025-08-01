@@ -2,14 +2,16 @@ import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
 import { UsersDataProps } from "../interface/users.interface";
 import { USER_QUERYKEY } from "../shared/const/user.querykeys";
 import { usersApi } from "../api/users.api";
+import { AxiosError } from "axios";
 
 const { getUsersApi, loginUsersApi } = usersApi();
 
 export const userService = () => {
   const getUsers = () => {
-    return useQuery<UsersDataProps[]>({
+    return useQuery<UsersDataProps[], AxiosError<any>>({
       queryKey: [USER_QUERYKEY.users],
       queryFn: getUsersApi,
+      refetchOnWindowFocus: false,
     });
   };
 
