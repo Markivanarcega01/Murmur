@@ -4,14 +4,12 @@ import { userService } from "../services/user.service";
 const { getUsers } = userService();
 
 const ProtectedRoutes = () => {
-  const { data, isLoading, isError } = getUsers();
+  // const { data, isLoading, isError } = getUsers();
+  const isTokenPresent = sessionStorage.getItem("token");
 
-  console.log(isError);
-  if (isError) {
+  // console.log(isError);
+  if (!isTokenPresent) {
     return <Navigate to={"/login"} />;
-  }
-  if (isLoading) {
-    return "Loading";
   }
   return <Outlet />;
 };

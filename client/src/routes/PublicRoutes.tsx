@@ -4,14 +4,15 @@ import { userService } from "../services/user.service";
 const { getUsers } = userService();
 
 const PublicRoutes = () => {
-  const { data, isLoading } = getUsers();
+  // const { data, isLoading } = getUsers();
+  const isTokenPresent = sessionStorage.getItem("token");
 
-  if (data) {
+  if (isTokenPresent) {
     return <Navigate to={"/"} />;
   }
-  if (isLoading) {
-    return "Loading";
-  }
+  // if (isLoading) {
+  //   return "Loading";
+  // }
   return <Outlet />;
 };
 
