@@ -2,6 +2,7 @@ const {
   User,
   Message,
   ConversationParticipant,
+  Conversation,
 } = require("../models/associations");
 
 //Show messages of a conversation room
@@ -30,6 +31,7 @@ const showMessages = async (req, res) => {
       },
       include: [
         { model: User, attributes: ["username", "firstname", "lastname"] },
+        { model: Conversation, attributes: ["name"] },
       ],
     });
     return res.status(200).json(messages);
@@ -42,8 +44,25 @@ const showMessages = async (req, res) => {
 
 const createMessage = async (req, res) => {
   try {
-    const message = await Message.create(req.body);
-    return res.status(200).json(message);
+    const userId = req.user.id;
+    const { conversationId, text } = req.body;
+    const isSenderHasAccessToTheConversation =
+      await ConversationParticipant.findOne({
+        where: {
+          userId: userId,
+          conversationId: conversationId,
+        },
+      });
+    if (isSenderHasAccessToTheConversation) {
+      const message = await Message.create({
+        senderId: userId,
+        conversationId: conversationId,
+        text: text,
+      });
+      return res.status(200).json(message);
+    } else {
+      return res.status(400).json({ error: "Access Denied" });
+    }
   } catch (error) {
     if (error.name == "SequelizeForeignKeyConstraintError") {
       return res.status(400).json({
