@@ -14,6 +14,17 @@ export const usersApi = () => {
     return response.data;
   };
 
+  const getUserApi = async () => {
+    const token = sessionStorage.getItem("token");
+
+    const response = await axios.get("http://127.0.0.1:3000/api/v1/get-user", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  };
+
   const loginUsersApi = async (credentials: UserLoginDataProps) => {
     // const response = await fetch("http://127.0.0.1:3000/auth/login", {
     //   method: "POST",
@@ -33,5 +44,5 @@ export const usersApi = () => {
     return response.data;
   };
 
-  return { getUsersApi, loginUsersApi };
+  return { getUsersApi, loginUsersApi, getUserApi };
 };
