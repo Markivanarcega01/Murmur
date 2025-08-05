@@ -18,11 +18,13 @@ const {
   updateConversationParticipants,
   deleteConversationParticipants,
   findConversationParticipants,
+  showParticipantConversations,
 } = require("../controllers/ConversationParticipantController");
-const { getUsers } = require("../controllers/UserController");
+const { getUsers, getUser } = require("../controllers/UserController");
 
 //Users Routes
 router.get("/get-users", getUsers);
+router.get("/get-user", getUser);
 
 //Messages Routes
 router.get("/show-messages/:id", showMessages);
@@ -42,6 +44,7 @@ router.get(
   "/find-conversation-participants/:conversationId",
   findConversationParticipants
 );
+router.get("/show-participant-conversations", showParticipantConversations);
 router.post(
   "/create-conversation-participants",
   createConversationParticipants
