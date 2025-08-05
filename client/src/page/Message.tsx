@@ -15,29 +15,45 @@ import { useState } from "react";
 import { userService } from "../services/user.service";
 import { messageService } from "../services/message.service";
 import { Navigate } from "react-router";
+import { conversationParticipantsService } from "../services/conversation-participants.service";
+import { ParticipantConversationsDataProps } from "../interface/conversation-participants.interface";
 
-const { getUsers } = userService();
+const { getUser } = userService();
 const { getMessages } = messageService();
+const { getParticipantConversations } = conversationParticipantsService();
 
 function Message() {
   const [selected, setSelected] = useState<number>(1);
+  const [conversationData, setConversationData] =
+    useState<ParticipantConversationsDataProps>();
+  console.log(conversationData);
   {
-    /** Fetch Users */
+    /** Fetch User */
   }
-  const { data, isLoading, isError } = getUsers();
+  const { data: loggedUser, isLoading, isError } = getUser();
+  console.log("user", loggedUser);
+  {
+    /** Fetch Messages */
+  }
   const {
     data: messages,
     isLoading: messageLoading,
     error,
   } = getMessages(selected);
 
-  console.log(isError);
-  console.log(error);
-  console.log(messages);
+  // console.log(isError);
+  //console.log(error);
+  //console.log(messages);
 
   {
-    /** Fetch Messages */
+    /** Fetch Participant Conversations */
   }
+
+  const {
+    data: participantConversations,
+    isLoading: participantConversationsIsLoading,
+    isError: participantConversationsIsError,
+  } = getParticipantConversations();
 
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -132,14 +148,14 @@ function Message() {
       lastConvo: "This is a sample1 convo",
     },
   ];
-  if (isError) {
+  if (participantConversationsIsError) {
     return <Navigate to={"/login"} />;
   }
   return (
     <>
       <div className="flex flex-row h-screen">
         {/* Component 1*/}
-        <div className="basis-1/4 p-4 flex flex-col h-full">
+        <div className="basis-1/4 p-4 flex flex-col h-full ">
           <div className="flex flex-row h-fit space-x-3">
             <div className="text-2xl font-semibold basis-10/12 self-center">
               Chats
@@ -188,22 +204,44 @@ function Message() {
             }`}
             onScroll={handleScroll}
           >
-            {isLoading
-              ? "Loading"
-              : data?.map((data) => (
-                  <div onClick={(e) => setSelected(data.id)} key={data.id}>
-                    <UserChatInformation
-                      profile={data.profile_picture}
-                      information={{
-                        name: `${data.firstname} ${data.lastname}`,
-                        lastConvo: `${
-                          data.Messages[data.Messages.length - 1]?.text || ""
-                        }`,
+            {participantConversations && !participantConversationsIsLoading
+              ? participantConversations?.map((data) => {
+                  let name =
+                    data.name != null
+                      ? data.name
+                      : data.participants.length <= 2
+                      ? data.participants
+                          .map((user) =>
+                            user.username !== loggedUser?.username
+                              ? `${user.firstname} ${user.lastname}`
+                              : ""
+                          )
+                          .join("") // join to convert array to string
+                      : data.participants
+                          .map((user) => user.firstname)
+                          .join(", ");
+                  const lastConvo =
+                    data.Messages.length !== 0 ? data.Messages[0].text : "";
+                  return (
+                    <div
+                      onClick={(e) => {
+                        setSelected(data.id);
+                        setConversationData(data);
                       }}
-                      isActive={true}
-                    />
-                  </div>
-                ))}
+                      key={data.id}
+                    >
+                      <UserChatInformation
+                        profile={data.participants[0].profile_picture}
+                        information={{
+                          name: name,
+                          lastConvo: lastConvo,
+                        }}
+                        isActive={true}
+                      />
+                    </div>
+                  );
+                })
+              : "Loading"}
           </div>
         </div>
 
@@ -211,11 +249,30 @@ function Message() {
         <div className="basis-3/4 border-x flex flex-col">
           <div className="border-b flex justify-between items-center">
             <div className="w-fit">
-              <UserChatInformation
-                profile={dummyData[0].profile}
-                information={{ name: `${dummyData[0].name}`, lastConvo: `` }}
-                isActive={false}
-              />
+              {conversationData ? (
+                <UserChatInformation
+                  profile={conversationData.participants[0].profile_picture}
+                  information={{
+                    name:
+                      conversationData.name != null
+                        ? `${conversationData.name}`
+                        : conversationData.participants.length <= 2
+                        ? conversationData.participants
+                            .filter(
+                              (user) => user.username !== loggedUser?.username
+                            )
+                            .map((user) => `${user.firstname} ${user.lastname}`)
+                            .join("") // Only one other user in 1-on-1 chat
+                        : conversationData.participants
+                            .map((user) => user.firstname)
+                            .join(", "), // Group chat
+                    lastConvo: ``,
+                  }}
+                  isActive={false} // comes from the socket io, if the user is connected
+                />
+              ) : (
+                "Loading"
+              )}
             </div>
             <div className="flex flex-row gap-x-5 mr-5">
               <button>
