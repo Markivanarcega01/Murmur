@@ -1,12 +1,15 @@
 import { useState } from "react";
 import { ConversationMessagesDataProps } from "../interface/conversations.interface";
+import { UsersDataProps } from "../interface/users.interface";
 
 function ChatBlock({
   conversationMessages,
+  loggedUser,
 }: {
   conversationMessages: ConversationMessagesDataProps[];
+  loggedUser: UsersDataProps;
 }) {
-  const [isUser, SetIsUser] = useState(false);
+  //const [isUser, SetIsUser] = useState(false);
   const dummyData = [
     {
       id: 1,
@@ -113,17 +116,18 @@ function ChatBlock({
       isUser: true,
     },
   ];
-  console.log(conversationMessages);
+  //console.log(conversationMessages);
   return (
     <>
       <div className="w-full flex flex-col gap-y-1 ">
         {conversationMessages.map((data) => {
+          let isUser = data.User.username == loggedUser.username;
           return (
             <div key={data.id}>
               <p className="text-xs text-center text-gray-500">
                 {data.User.firstname}
               </p>
-              {!true ? (
+              {!isUser ? (
                 <>
                   <p className="text-xs pl-12 text-gray-500">
                     {data.User.firstname}
