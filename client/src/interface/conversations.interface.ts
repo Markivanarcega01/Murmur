@@ -5,9 +5,9 @@ export interface ConversationDataProps {
 }
 
 export interface ConversationMessagesDataProps {
-  id: number;
-  conversationId: number;
-  senderId: number;
+  id: string;
+  conversationId: string;
+  senderId: string;
   text: string;
   updatedAt: string;
   createdAt: string;

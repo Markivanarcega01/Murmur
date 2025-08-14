@@ -1,7 +1,7 @@
 import { MessageProps } from "./messages.interface";
 
 export interface UsersDataProps {
-  id: number;
+  id: string;
   profile_picture: string;
   username: string;
   email: string;

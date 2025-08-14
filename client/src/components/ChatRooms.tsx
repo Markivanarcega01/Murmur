@@ -5,6 +5,7 @@ import UserChatInformation from "./UserChatInformation";
 import { ParticipantConversationsDataProps } from "../interface/conversation-participants.interface";
 import { UsersDataProps } from "../interface/users.interface";
 import { getConversationDisplayName } from "../shared/utils/getConversationDisplayName";
+import { GetMessagesProps } from "../interface/messages.interface";
 
 export default function ChatRooms({
   participantConversations,
@@ -13,7 +14,7 @@ export default function ChatRooms({
 }: {
   participantConversations: ParticipantConversationsDataProps[];
   loggedUser: UsersDataProps;
-  setSelected: React.Dispatch<React.SetStateAction<number>>;
+  setSelected: React.Dispatch<React.SetStateAction<GetMessagesProps>>;
 }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const handleScroll = (e: React.UIEvent<HTMLElement>) => {
@@ -78,7 +79,7 @@ export default function ChatRooms({
             return (
               <div
                 onClick={(e) => {
-                  setSelected(data.id);
+                  setSelected({conversationId:data.id});
                 }}
                 key={data.id}
               >

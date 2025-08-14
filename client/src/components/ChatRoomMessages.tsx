@@ -12,6 +12,8 @@ import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import { ParticipantConversationsDataProps } from "../interface/conversation-participants.interface";
 import { UsersDataProps } from "../interface/users.interface";
 import { ConversationMessagesDataProps } from "../interface/conversations.interface";
+import React from "react";
+import { messageService } from "../services/message.service";
 
 export default function ChatRoomMessages({
   participantConversationsSelectedValue,
@@ -22,6 +24,21 @@ export default function ChatRoomMessages({
   loggedUser: UsersDataProps;
   messages: ConversationMessagesDataProps[];
 }) {
+  const {createMessage} = messageService()
+  const userMessage = createMessage()
+  const [message, setMessage] = React.useState("")
+  const handleMessage = (e:React.FormEvent) =>{
+    e.preventDefault()
+
+    userMessage.mutate({
+      text:message,
+      conversationId: participantConversationsSelectedValue.id
+    },{
+      onError: (error:any)=>{
+        console.log("Create message failed", error)
+      }
+    })
+  }
   return (
     <div className="basis-3/4 border-x flex flex-col">
       {/** Conversation Heading Section */}
@@ -76,10 +93,12 @@ export default function ChatRoomMessages({
           <button className="absolute inset-y-0 end-0 flex items-center pe-3 ">
             <EmojiEmotionsIcon color="primary" />
           </button>
-          <form action="">
+          <form onSubmit={handleMessage}>
             <input
               className="block w-full h-8 px-4 pe-10 text-sm rounded-full bg-gray-200"
               placeholder="Search Messenger"
+              value={message}
+              onChange={(e)=>setMessage(e.target.value)}
               required
             />
           </form>

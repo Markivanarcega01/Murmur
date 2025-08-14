@@ -6,14 +6,14 @@ import { Navigate } from "react-router";
 import { conversationParticipantsService } from "../services/conversation-participants.service";
 import ChatRooms from "../components/ChatRooms";
 import ChatRoomMessages from "../components/ChatRoomMessages";
+import { GetMessagesProps } from "../interface/messages.interface";
 
 const { getUser } = userService();
 const { getMessages } = messageService();
 const { getParticipantConversations } = conversationParticipantsService();
 
 function Message() {
-  const [selected, setSelected] = useState<number>(1);
-
+  const [selected, setSelected] = useState<GetMessagesProps>({conversationId:""});
   {
     /** Fetch User */
   }
@@ -21,7 +21,7 @@ function Message() {
   {
     /** Fetch Messages */
   }
-  const { data: messages, isLoading: messageLoading } = getMessages(selected);
+  const { data: messages, isLoading: messageLoading } = getMessages({conversationId:selected?.conversationId});
 
   {
     /** Fetch Participant Conversations */
@@ -34,13 +34,13 @@ function Message() {
 
   const participantConversationsSelectedValue = useMemo(() => {
     return participantConversations?.find(
-      (conversation) => conversation.id === selected
+      (conversation) => conversation.id === selected?.conversationId
     );
   }, [participantConversations, selected]);
 
   useEffect(() => {
     if (participantConversations && participantConversations.length) {
-      setSelected(participantConversations[0].id);
+      setSelected({conversationId:participantConversations[0].id});
     }
   }, [participantConversations]);
 
