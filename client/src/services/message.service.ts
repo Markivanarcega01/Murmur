@@ -17,15 +17,17 @@ export const messageService = () => {
     });
   };
 
-  const createMessage = () =>{
-    const queryClient = useQueryClient()
+  const createMessage = () => {
+    const queryClient = useQueryClient();
     return useMutation({
       mutationKey: [MESSAGE_QUERYKEY.createMessage],
       mutationFn: createMessageApi,
-      onSuccess:()=>{
-        queryClient.invalidateQueries({queryKey:[MESSAGE_QUERYKEY.messages]})
-      }
-    })
-  }
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: [MESSAGE_QUERYKEY.messages],
+        });
+      },
+    });
+  };
   return { getMessages, createMessage };
 };

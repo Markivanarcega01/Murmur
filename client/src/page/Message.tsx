@@ -13,7 +13,7 @@ const { getMessages } = messageService();
 const { getParticipantConversations } = conversationParticipantsService();
 
 function Message() {
-  const [selected, setSelected] = useState<GetMessagesProps>({conversationId:""});
+  const [selected, setSelected] = useState<GetMessagesProps>("");
   {
     /** Fetch User */
   }
@@ -21,7 +21,7 @@ function Message() {
   {
     /** Fetch Messages */
   }
-  const { data: messages, isLoading: messageLoading } = getMessages({conversationId:selected?.conversationId});
+  const { data: messages, isLoading: messageLoading } = getMessages(selected);
 
   {
     /** Fetch Participant Conversations */
@@ -34,13 +34,13 @@ function Message() {
 
   const participantConversationsSelectedValue = useMemo(() => {
     return participantConversations?.find(
-      (conversation) => conversation.id === selected?.conversationId
+      (conversation) => conversation.id === selected
     );
   }, [participantConversations, selected]);
 
   useEffect(() => {
     if (participantConversations && participantConversations.length) {
-      setSelected({conversationId:participantConversations[0].id});
+      setSelected(participantConversations[0].id);
     }
   }, [participantConversations]);
 

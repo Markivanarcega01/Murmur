@@ -9,9 +9,8 @@ import { GetMessagesProps } from "../interface/messages.interface";
 import { userService } from "../services/user.service";
 import { conversationService } from "../services/conversation.service";
 
-
-const {getUsers} = userService()
-const {createDirectConversation} = conversationService()
+const { getUsers } = userService();
+const { createDirectConversation } = conversationService();
 
 export default function ChatRooms({
   participantConversations,
@@ -22,22 +21,23 @@ export default function ChatRooms({
   loggedUser: UsersDataProps;
   setSelected: React.Dispatch<React.SetStateAction<GetMessagesProps>>;
 }) {
-
-  
-  const {data:users, isLoading:isUsersLoading} = getUsers()
-  const directConversation = createDirectConversation() 
+  const { data: users, isLoading: isUsersLoading } = getUsers();
+  const directConversation = createDirectConversation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
   const handleScroll = (e: React.UIEvent<HTMLElement>) => {
     const { scrollTop } = e.target as HTMLElement;
     setIsScrolled(scrollTop > 0);
   };
-  const handleDirectConversation = (userSenderId:string, userReceiverId:string)=>{
+  const handleDirectConversation = (
+    userSenderId: string,
+    userReceiverId: string
+  ) => {
     directConversation.mutate({
       userdAId: userSenderId,
-      userBId:userReceiverId
-    })
-  }
+      userBId: userReceiverId,
+    });
+  };
   return (
     <div className="basis-1/4 p-4 flex flex-col h-full ">
       <div className="flex flex-row h-fit space-x-3">
@@ -71,13 +71,23 @@ export default function ChatRooms({
               />
             </svg>
           </div>
-          {isFocused ? <button onClick={(e)=> {setIsFocused(false)}}>b</button> : ""}
+          {isFocused ? (
+            <button
+              onClick={(e) => {
+                setIsFocused(false);
+              }}
+            >
+              b
+            </button>
+          ) : (
+            ""
+          )}
           <input
             type="search"
             id="default-search"
             className="block w-full h-10 p-4 ps-10 text-sm rounded-full bg-gray-200"
             placeholder="Search Messenger"
-            onFocus={()=> setIsFocused(true)}
+            onFocus={() => setIsFocused(true)}
             // onBlur={()=> setIsFocused(false)}
             required
           />
@@ -91,46 +101,54 @@ export default function ChatRooms({
         }`}
         onScroll={handleScroll}
       >
-        {!isFocused ? participantConversations?.map(
-          (data: ParticipantConversationsDataProps) => {
-            let name = getConversationDisplayName(data, loggedUser.username);
-            const lastConvo =
-              data.Messages.length !== 0 ? data.Messages[0].text : "";
-            return (
-              <div
-                onClick={(e) => {
-                  setSelected({conversationId:data.id});
-                }}
-                key={data.id}
-              >
-                <UserChatInformation
-                  profile={data.participants[0].profile_picture}
-                  information={{
-                    name: name,
-                    lastConvo: lastConvo,
+        {!isFocused
+          ? participantConversations?.map(
+              (data: ParticipantConversationsDataProps) => {
+                let name = getConversationDisplayName(
+                  data,
+                  loggedUser.username
+                );
+                const lastConvo =
+                  data.Messages.length !== 0 ? data.Messages[0].text : "";
+                return (
+                  <div
+                    onClick={(e) => {
+                      setSelected(data.id);
+                    }}
+                    key={data.id}
+                  >
+                    <UserChatInformation
+                      profile={data.participants[0].profile_picture}
+                      information={{
+                        name: name,
+                        lastConvo: lastConvo,
+                      }}
+                      isActive={true}
+                    />
+                  </div>
+                );
+              }
+            )
+          : users?.map((user) => {
+              return (
+                <div
+                  key={user.id}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    console.log("convossdsa", loggedUser.id, user.id);
+                    handleDirectConversation(loggedUser.id, user.id);
+                    setIsFocused(false);
                   }}
-                  isActive={true}
-                />
-              </div>
-            );
-          }
-        ): users?.map((user)=>{
-          return (
-           <div key={user.id} onClick={(e)=>{
-            e.preventDefault()
-            console.log("convossdsa",loggedUser.id, user.id)
-            handleDirectConversation(loggedUser.id, user.id)
-            setIsFocused(false)
-           }}>
-              <UserChatInformation
-              profile={user.profile_picture}
-              information={{
-                name:`${user.firstname} ${user.lastname}`
-              }}
-              />
-           </div>
-          )
-        })}
+                >
+                  <UserChatInformation
+                    profile={user.profile_picture}
+                    information={{
+                      name: `${user.firstname} ${user.lastname}`,
+                    }}
+                  />
+                </div>
+              );
+            })}
       </div>
     </div>
   );
