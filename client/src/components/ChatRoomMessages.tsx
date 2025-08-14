@@ -15,6 +15,8 @@ import { ConversationMessagesDataProps } from "../interface/conversations.interf
 import React from "react";
 import { messageService } from "../services/message.service";
 
+const {createMessage} = messageService()
+
 export default function ChatRoomMessages({
   participantConversationsSelectedValue,
   loggedUser,
@@ -24,7 +26,6 @@ export default function ChatRoomMessages({
   loggedUser: UsersDataProps;
   messages: ConversationMessagesDataProps[];
 }) {
-  const {createMessage} = messageService()
   const userMessage = createMessage()
   const [message, setMessage] = React.useState("")
   const handleMessage = (e:React.FormEvent) =>{

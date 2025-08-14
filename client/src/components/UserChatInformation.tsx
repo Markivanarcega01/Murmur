@@ -4,8 +4,8 @@ function UserChatInformation({
   isActive,
 }: {
   profile: string;
-  information: { name: string; lastConvo: string };
-  isActive: boolean;
+  information: { name: string; lastConvo?: string };
+  isActive?: boolean;
 }) {
   return (
     <>

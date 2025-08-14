@@ -14,3 +14,8 @@ export interface ConversationMessagesDataProps {
   User: UsersDataProps;
   Conversation: ConversationDataProps;
 }
+
+export interface DirectConversationDataProps{
+  userdAId:string;
+  userBId:string
+}

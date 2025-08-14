@@ -11,6 +11,7 @@ const {
   createConversation,
   updateConvesation,
   deleteConversation,
+  createDirectConversation,
 } = require("../controllers/ConversationController");
 const {
   showConversationParticipants,
@@ -35,6 +36,7 @@ router.delete("/delete-message/:id", destroyMessage);
 //Conversation Routes
 router.get("/show-conversations", showConversations);
 router.post("/create-conversation", createConversation);
+router.post("/create-direct-conversation", createDirectConversation)
 router.put("/update-conversation", updateConvesation);
 router.delete("/delete-conversation/:id", deleteConversation);
 
