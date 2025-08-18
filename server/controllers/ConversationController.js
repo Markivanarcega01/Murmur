@@ -19,18 +19,18 @@ const createDirectConversation = async (req, res) => {
     //Check 2 users conversation Ids
     const { userAId, userBId } = req.body;
     if (userAId && userBId) {
-      const existingConversation = await Conversation.findOne({
+      const existingDirectConversation = await Conversation.findOn({
         where: {
           id: {
             [Op.in]: Sequelize.literal(`(
-                            SELECT cp.conversationId
-                            FROM conversation_participants cp
-                            WHERE cp.userId IN ('${userAId}', '${userBId}')
-                            GROUP BY cp.conversationId
-                            HAVING COUNT(DISTINCT cp.userId) = 2
-                        )`),
+                              SELECT cp.conversationId
+                              FROM conversation_participants cp
+                              WHERE cp.userId IN ('${userAId}', '${userBId}')
+                              GROUP BY cp.conversationId
+                              HAVING COUNT(DISTINCT cp.userId) = 2
+                          )`),
           },
-          name: null,
+          type: "direct",
         },
         include: [
           {
@@ -41,8 +41,10 @@ const createDirectConversation = async (req, res) => {
           },
         ],
       });
-      if (existingConversation) {
-        return res.status(400).json(existingConversation);
+
+      if (existingDirectConversation) {
+        console.log(existingDirectConversation);
+        return res.status(400).json(existingDirectConversation);
       }
     }
     const conversation = await Conversation.create(req.body);
