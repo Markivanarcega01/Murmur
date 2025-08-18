@@ -1,38 +1,14 @@
 import { Button, Grid2, TextField, Typography } from "@mui/material";
-import { useNavigate } from "react-router";
-import { userService } from "../services/user.service";
-import React from "react";
-
+import { useLogin } from "./Hook/useLogin";
 function Login() {
-  const navigate = useNavigate();
-  const { loginUser } = userService();
-
-  const login = loginUser();
-  const [username, setUsername] = React.useState("");
-  const [password, setPassword] = React.useState("");
-
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    login.mutate(
-      {
-        username: username,
-        password: password,
-      },
-      {
-        onSuccess: (data) => {
-          sessionStorage.setItem("token", data.token);
-          console.log("Login successful:", data);
-          navigate("/");
-        },
-        onError: (error: any) => {
-          console.log("Login failed", error);
-        },
-      }
-    );
-  };
-
-  console.log(login);
+  const {
+    handleLogin,
+    username,
+    setUsername,
+    password,
+    setPassword,
+    navigate,
+  } = useLogin();
 
   return (
     <form onSubmit={handleLogin}>
