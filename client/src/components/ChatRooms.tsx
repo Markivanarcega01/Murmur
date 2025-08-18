@@ -8,6 +8,7 @@ import { getConversationDisplayName } from "../shared/utils/getConversationDispl
 import { GetMessagesProps } from "../interface/messages.interface";
 import { userService } from "../services/user.service";
 import { conversationService } from "../services/conversation.service";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 const { getUsers } = userService();
 const { createDirectConversation } = conversationService();
@@ -52,8 +53,20 @@ export default function ChatRooms({
         </button>
       </div>
 
-      <form className="max-w-md mt-4 mb-4">
-        <div className="relative">
+      <form className="max-w-md mt-4 mb-4 flex flex-row">
+        {isFocused ? (
+          <button
+            className="w-11"
+            onClick={(e) => {
+              setIsFocused(false);
+            }}
+          >
+            <ArrowBackIcon />
+          </button>
+        ) : (
+          ""
+        )}
+        <div className="relative w-full">
           <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
             <svg
               className="w-4 h-4 text-gray-500 dark:text-gray-400"
@@ -71,17 +84,7 @@ export default function ChatRooms({
               />
             </svg>
           </div>
-          {isFocused ? (
-            <button
-              onClick={(e) => {
-                setIsFocused(false);
-              }}
-            >
-              b
-            </button>
-          ) : (
-            ""
-          )}
+
           <input
             type="search"
             id="default-search"
