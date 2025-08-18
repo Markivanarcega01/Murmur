@@ -15,6 +15,11 @@ Conversation.init(
       type: DataTypes.STRING,
       allowNull: true,
     },
+    type: {
+      type: DataTypes.ENUM("direct", "group"),
+      allowNull: false,
+      defaultValue: "direct",
+    },
   },
   {
     sequelize,
