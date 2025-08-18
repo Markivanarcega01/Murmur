@@ -17,10 +17,12 @@ export default function ChatRooms({
   participantConversations,
   loggedUser,
   setSelected,
+  isCreateMessageOpen,
 }: {
   participantConversations: ParticipantConversationsDataProps[];
   loggedUser: UsersDataProps;
   setSelected: React.Dispatch<React.SetStateAction<GetMessagesProps>>;
+  isCreateMessageOpen: React.Dispatch<React.SetStateAction<any>>;
 }) {
   const { data: users, isLoading: isUsersLoading } = getUsers();
   const directConversation = createDirectConversation();
@@ -48,7 +50,10 @@ export default function ChatRooms({
         <button className="rounded-full p-1 bg-gray-200 w-9">
           <MoreHorizIcon />
         </button>
-        <button className="rounded-full p-1 bg-gray-200 w-9">
+        <button
+          className="rounded-full p-1 bg-gray-200 w-9"
+          onClick={(e) => isCreateMessageOpen(true)}
+        >
           <CreateOutlinedIcon />
         </button>
       </div>
@@ -104,7 +109,7 @@ export default function ChatRooms({
         }`}
         onScroll={handleScroll}
       >
-        {!isFocused
+        {!isFocused && participantConversations
           ? participantConversations?.map(
               (data: ParticipantConversationsDataProps) => {
                 let name = getConversationDisplayName(

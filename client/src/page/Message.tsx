@@ -7,6 +7,7 @@ import { conversationParticipantsService } from "../services/conversation-partic
 import ChatRooms from "../components/ChatRooms";
 import ChatRoomMessages from "../components/ChatRoomMessages";
 import { GetMessagesProps } from "../interface/messages.interface";
+import CreateChatRoom from "../components/CreateChatRoom";
 
 const { getUser } = userService();
 const { getMessages } = messageService();
@@ -14,6 +15,7 @@ const { getParticipantConversations } = conversationParticipantsService();
 
 function Message() {
   const [selected, setSelected] = useState<GetMessagesProps>("");
+  const [isCreateMessageOpen, setIsCreateMessageOpen] = useState(false);
   {
     /** Fetch User */
   }
@@ -42,8 +44,10 @@ function Message() {
     if (participantConversations && participantConversations.length) {
       setSelected(participantConversations[0].id);
     }
+    if (participantConversationsIsError) {
+      setIsCreateMessageOpen(true);
+    }
   }, [participantConversations]);
-
   if (participantConversationsIsError) {
     return <Navigate to={"/login"} />;
   }
@@ -57,6 +61,7 @@ function Message() {
             participantConversations={participantConversations}
             loggedUser={loggedUser}
             setSelected={setSelected}
+            isCreateMessageOpen={setIsCreateMessageOpen}
           />
         ) : (
           //Create a skeleton component
@@ -64,7 +69,10 @@ function Message() {
         )}
 
         {/* Component 2 */}
-        {participantConversationsSelectedValue && loggedUser && messages ? (
+        {participantConversationsSelectedValue &&
+        loggedUser &&
+        messages &&
+        !isCreateMessageOpen ? (
           <ChatRoomMessages
             participantConversationsSelectedValue={
               participantConversationsSelectedValue
@@ -72,23 +80,27 @@ function Message() {
             loggedUser={loggedUser}
             messages={messages}
           />
-        ) : (
+        ) : isCreateMessageOpen ? (
           //Create a skeleton component
-          "Loading Middle"
+          <CreateChatRoom />
+        ) : (
+          "Loading middle skeleton"
         )}
 
         {/** Component 3*/}
-        <div className="basis-1/4">
-          {participantConversationsSelectedValue && loggedUser ? (
+        {participantConversationsSelectedValue &&
+        loggedUser &&
+        !isCreateMessageOpen ? (
+          <div className="basis-1/4">
             <ChatBlockInformation
               chatRoomDetails={participantConversationsSelectedValue}
               loggedUser={loggedUser?.username}
             />
-          ) : (
-            //Create a skeleton component
-            <p>Loading Chatroom Details</p>
-          )}
-        </div>
+          </div>
+        ) : (
+          //Create a skeleton component
+          ""
+        )}
       </div>
     </>
   );
