@@ -2,7 +2,7 @@ import "./App.css";
 import { Routes, Route } from "react-router";
 import Message from "./page/Message";
 import Login from "./page/Login";
-import Registration from "./page/Registration";
+import Registration from "./page/Registration/Registration";
 import { io } from "socket.io-client";
 import React from "react";
 import ProtectedRoutes from "./routes/ProtectedRoutes";

@@ -14,6 +14,7 @@ export const messageService = () => {
         const [, conversation] = queryKey as [string, GetMessagesProps];
         return getMessagesApi(conversation);
       },
+      enabled: Boolean(conversation),
     });
   };
 
