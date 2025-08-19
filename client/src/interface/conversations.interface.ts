@@ -15,7 +15,15 @@ export interface ConversationMessagesDataProps {
   Conversation: ConversationDataProps;
 }
 
-export interface DirectConversationDataProps{
-  userdAId:string;
-  userBId:string
+export interface DirectConversationDataProps {
+  userdAId: string;
+  userBId: string;
+}
+
+export interface ResponseConversationDataProps {
+  conversationId: string;
+  createdAt: string;
+  id: string;
+  updatedAt: string;
+  userId: string;
 }

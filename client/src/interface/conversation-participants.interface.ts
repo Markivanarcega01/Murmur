@@ -6,4 +6,5 @@ export interface ParticipantConversationsDataProps {
   name: string;
   participants: UsersDataProps[];
   Messages: ConversationMessagesDataProps[];
+  type: string;
 }
