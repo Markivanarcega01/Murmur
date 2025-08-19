@@ -102,7 +102,7 @@ export default function ChatRooms({
         </div>
       </form>
 
-      {/*Add is Selected for each users */}
+      {/*Drop down menu if search field is clicked */}
       <div
         className={`flex-1 overflow-auto ${
           isScrolled ? "border-y border-slate-200" : ""
@@ -122,6 +122,7 @@ export default function ChatRooms({
                   <div
                     onClick={(e) => {
                       setSelected(data.id);
+                      isCreateMessageOpen(false);
                     }}
                     key={data.id}
                   >
@@ -146,6 +147,19 @@ export default function ChatRooms({
                     console.log("convossdsa", loggedUser.id, user.id);
                     handleDirectConversation(loggedUser.id, user.id);
                     setIsFocused(false);
+                    if (participantConversations) {
+                      participantConversations.map((convo) => {
+                        const participantsIds = convo.participants.map(
+                          (participants) => participants.id
+                        );
+                        if (
+                          participantsIds.includes(loggedUser.id) &&
+                          participantsIds.includes(user.id)
+                        ) {
+                          setSelected(convo.id);
+                        }
+                      });
+                    }
                   }}
                 >
                   <UserChatInformation

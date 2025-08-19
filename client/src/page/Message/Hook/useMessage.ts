@@ -3,7 +3,6 @@ import { GetMessagesProps } from "../../../interface/messages.interface";
 import { conversationParticipantsService } from "../../../services/conversation-participants.service";
 import { messageService } from "../../../services/message.service";
 import { userService } from "../../../services/user.service";
-import { Navigate } from "react-router";
 
 const { getUser } = userService();
 const { getMessages } = messageService();
@@ -20,6 +19,7 @@ export const useMessage = () => {
     /** Fetch Messages */
   }
   const { data: messages, isLoading: messageLoading } = getMessages(selected);
+  const [isFirstLoad, setIsFirstLoad] = useState(true);
 
   {
     /** Fetch Participant Conversations */
@@ -37,13 +37,21 @@ export const useMessage = () => {
   }, [participantConversations, selected]);
 
   useEffect(() => {
-    if (participantConversations && participantConversations.length) {
+    if (!isFirstLoad) {
+      return;
+    }
+    if (
+      participantConversations &&
+      participantConversations.length &&
+      isFirstLoad
+    ) {
       setSelected(participantConversations[0].id);
+      setIsFirstLoad(false);
     }
     if (participantConversationsIsError) {
       setIsCreateMessageOpen(true);
     }
-  }, [participantConversations]);
+  }, [participantConversations, isFirstLoad]);
 
   return {
     loggedUser,
