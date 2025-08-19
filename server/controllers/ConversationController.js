@@ -19,7 +19,7 @@ const createDirectConversation = async (req, res) => {
     //Check 2 users conversation Ids
     const { userAId, userBId } = req.body;
     if (userAId && userBId) {
-      const existingDirectConversation = await Conversation.findOn({
+      const existingDirectConversation = await Conversation.findOne({
         where: {
           id: {
             [Op.in]: Sequelize.literal(`(
@@ -43,7 +43,6 @@ const createDirectConversation = async (req, res) => {
       });
 
       if (existingDirectConversation) {
-        console.log(existingDirectConversation);
         return res.status(400).json(existingDirectConversation);
       }
     }

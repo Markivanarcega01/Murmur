@@ -48,7 +48,7 @@ const showParticipantConversations = async (req, res) => {
       where: {
         id: convoIds,
       },
-      attributes: ["id", "name"],
+      attributes: ["id", "name", "type"],
       include: [
         {
           model: User,
