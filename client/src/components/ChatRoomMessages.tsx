@@ -15,7 +15,7 @@ import { ConversationMessagesDataProps } from "../interface/conversations.interf
 import React from "react";
 import { messageService } from "../services/message.service";
 
-const {createMessage} = messageService()
+const { createMessage } = messageService();
 
 export default function ChatRoomMessages({
   participantConversationsSelectedValue,
@@ -26,22 +26,25 @@ export default function ChatRoomMessages({
   loggedUser: UsersDataProps;
   messages: ConversationMessagesDataProps[];
 }) {
-  const userMessage = createMessage()
-  const [message, setMessage] = React.useState("")
-  const handleMessage = (e:React.FormEvent) =>{
-    e.preventDefault()
+  const userMessage = createMessage();
+  const [message, setMessage] = React.useState("");
+  const handleMessage = (e: React.FormEvent) => {
+    e.preventDefault();
 
-    userMessage.mutate({
-      text:message,
-      conversationId: participantConversationsSelectedValue.id
-    },{
-      onError: (error:any)=>{
-        console.log("Create message failed", error)
+    userMessage.mutate(
+      {
+        text: message,
+        conversationId: participantConversationsSelectedValue.id,
+      },
+      {
+        onError: (error: any) => {
+          console.log("Create message failed", error);
+        },
       }
-    })
-  }
+    );
+  };
   return (
-    <div className="basis-3/4 border-x flex flex-col">
+    <div className="basis-3/4 border-x flex flex-col flex-1">
       {/** Conversation Heading Section */}
       <div className="border-b flex justify-between items-center">
         <div className="w-fit">
@@ -99,7 +102,7 @@ export default function ChatRoomMessages({
               className="block w-full h-8 px-4 pe-10 text-sm rounded-full bg-gray-200"
               placeholder="Search Messenger"
               value={message}
-              onChange={(e)=>setMessage(e.target.value)}
+              onChange={(e) => setMessage(e.target.value)}
               required
             />
           </form>
