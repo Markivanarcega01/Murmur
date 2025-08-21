@@ -16,7 +16,7 @@ function Message() {
   } = useMessage();
   return (
     <>
-      <div className="flex flex-row h-screen">
+      <div className="flex flex-row h-dvh">
         {participantConversations && loggedUser ? (
           //Component 1
           <ChatRooms

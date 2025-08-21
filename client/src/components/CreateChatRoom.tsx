@@ -7,6 +7,7 @@ import { useMessage } from "../page/Message/Hook/useMessage";
 import { conversationService } from "../services/conversation.service";
 import { ParticipantConversationsDataProps } from "../interface/conversation-participants.interface";
 import { ResponseConversationDataProps } from "../interface/conversations.interface";
+import GroupChatRoomTemplate from "./GroupChatRoomTemplate";
 
 const { getUsers } = userService();
 const { createDirectConversation } = conversationService();
@@ -70,13 +71,18 @@ export default function CreateChatRoom() {
       }
     );
   };
+  console.log(selectedUsers.length);
 
   return (
-    <div className="bg-red-500 w-full h-full flex flex-col">
+    <div className=" w-full h-full flex flex-col">
       {/* Input with chips */}
-      <div className="relative w-full mb-2">
+      <div
+        className={`relative w-full flex flex-col ${
+          selectedUsers.length == 1 ? "" : "h-full"
+        }`}
+      >
         <div className="flex flex-wrap items-center gap-2 border rounded-full px-3 py-1 bg-gray-200">
-          {selectedUsers.map((user) => (
+          {selectedUsers.map((user, index) => (
             <div
               key={user.id}
               className="flex items-center gap-1 bg-gray-300 px-2 py-1 rounded-full text-sm"
@@ -84,7 +90,30 @@ export default function CreateChatRoom() {
               {user.firstname} {user.lastname}
               <button
                 className="ml-1 text-gray-600 hover:text-red-500"
-                onClick={() => handleRemoveUser(user.id)}
+                onClick={() => {
+                  handleRemoveUser(user.id);
+                  if (!participantConversations || !loggedUser) return;
+                  const existingConversation = participantConversations.find(
+                    (convo) => {
+                      const participantsIds = convo.participants.map(
+                        (participants) => participants.id
+                      );
+                      return (
+                        participantsIds.includes(loggedUser.id) &&
+                        participantsIds.includes(
+                          selectedUsers[index === 0 ? 1 : 0].id
+                        ) &&
+                        convo.type == "direct"
+                      );
+                    }
+                  );
+                  if (existingConversation) {
+                    setSelected(existingConversation.id);
+                  } else {
+                    setSelected("");
+                    // handleDirectConversation(loggedUser.id, user.id);
+                  }
+                }}
               >
                 ✕
               </button>
@@ -104,7 +133,7 @@ export default function CreateChatRoom() {
 
         {/* Dropdown list (absolute inside relative container) */}
         {isFocused && loggedUser && userSearch ? (
-          <div className="absolute left-0 right-0 top-full bg-white border rounded shadow mt-1 max-h-60 overflow-y-auto z-10">
+          <div className="absolute left-0 right-0 top-10 bg-white border rounded shadow mt-1 max-h-60 overflow-y-auto z-10">
             {filteredUsers?.map((user) => (
               <div
                 key={user.id}
@@ -145,6 +174,13 @@ export default function CreateChatRoom() {
             {filteredUsers?.length === 0 && (
               <div className="p-2 text-gray-500 text-sm">No users found</div>
             )}
+          </div>
+        ) : selectedUsers.length > 1 ? (
+          // selectedUsers.map((user) => {
+          //   return `${user.firstname} ${user.lastname}`;
+          // })
+          <div className="flex-1">
+            <GroupChatRoomTemplate />
           </div>
         ) : (
           ""

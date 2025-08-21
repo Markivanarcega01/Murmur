@@ -6,8 +6,8 @@ function ChatBlock({
   conversationMessages,
   loggedUser,
 }: {
-  conversationMessages: ConversationMessagesDataProps[];
-  loggedUser: UsersDataProps;
+  conversationMessages?: ConversationMessagesDataProps[];
+  loggedUser?: UsersDataProps;
 }) {
   //const [isUser, SetIsUser] = useState(false);
   const dummyData = [
@@ -119,9 +119,9 @@ function ChatBlock({
   //console.log(conversationMessages);
   return (
     <>
-      <div className="w-full flex flex-col gap-y-1 ">
-        {conversationMessages.map((data) => {
-          let isUser = data.User.username == loggedUser.username;
+      <div className="w-full flex flex-col gap-y-1">
+        {conversationMessages?.map((data) => {
+          let isUser = data.User.username == loggedUser?.username;
           return (
             <div key={data.id}>
               <p className="text-xs text-center text-gray-500">
