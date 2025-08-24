@@ -46,10 +46,11 @@ const createDirectConversation = async (req, res) => {
         return res.status(400).json(existingDirectConversation);
       }
     }
-    const conversation = await Conversation.create(req.body);
+    const conversation = await Conversation.create();
+    const conversationId = conversation.dataValues.id;
     const conversation_participants = await ConversationParticipant.bulkCreate([
-      { userId: userAId, conversationId: conversation.dataValues.id },
-      { userId: userBId, conversationId: conversation.dataValues.id },
+      { userId: userAId, conversationId: conversationId },
+      { userId: userBId, conversationId: conversationId },
     ]);
     return res.status(200).json(conversation_participants);
   } catch (error) {
@@ -59,8 +60,18 @@ const createDirectConversation = async (req, res) => {
 
 const createConversation = async (req, res) => {
   try {
-    const conversation = await Conversation.create(req.body);
-    return res.status(200).json(conversation);
+    const { users, type } = req.body; //array of userId
+    const conversation = await Conversation.create({ type });
+    const conversationId = conversation.dataValues.id;
+    // 2. Prepare participant records
+    const participantsToInsert = users.map((userId) => ({
+      userId,
+      conversationId,
+    }));
+    const conversation_participants = await ConversationParticipant.bulkCreate(
+      participantsToInsert
+    );
+    return res.status(200).json(conversation_participants);
   } catch (error) {
     return res.status(500).json(error);
   }
