@@ -44,7 +44,7 @@ function Message() {
           />
         ) : isCreateMessageOpen ? (
           //Create a skeleton component
-          <CreateChatRoom />
+          <CreateChatRoom isCreateMessageOpen={setIsCreateMessageOpen} />
         ) : (
           "Loading middle skeleton"
         )}

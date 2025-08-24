@@ -1,3 +1,4 @@
 export const CONVERSATION_QUERYKEY = {
-    directConversation: "direct-conversation"
+  directConversation: "direct-conversation",
+  groupConversation: "group-conversation",
 };

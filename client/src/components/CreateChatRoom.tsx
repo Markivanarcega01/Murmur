@@ -1,4 +1,4 @@
-import React from "react";
+import React, { SetStateAction } from "react";
 import { userService } from "../services/user.service";
 import UserChatInformation from "./UserChatInformation";
 import { UsersDataProps } from "../interface/users.interface";
@@ -8,11 +8,16 @@ import { conversationService } from "../services/conversation.service";
 import { ParticipantConversationsDataProps } from "../interface/conversation-participants.interface";
 import { ResponseConversationDataProps } from "../interface/conversations.interface";
 import GroupChatRoomTemplate from "./GroupChatRoomTemplate";
+import { useMyState } from "../context/selectedContext";
 
 const { getUsers } = userService();
 const { createDirectConversation } = conversationService();
 
-export default function CreateChatRoom() {
+export default function CreateChatRoom({
+  isCreateMessageOpen,
+}: {
+  isCreateMessageOpen: React.Dispatch<SetStateAction<boolean>>;
+}) {
   const { data: users, isLoading: isUsersLoading } = getUsers();
 
   const [isFocused, setIsFocused] = React.useState(false);
@@ -49,9 +54,10 @@ export default function CreateChatRoom() {
     loggedUser,
     participantConversationsSelectedValue,
     messages,
-    setSelected,
     participantConversations,
   } = useMessage();
+
+  const { setSelected } = useMyState();
 
   const handleDirectConversation = (
     userSenderId: string,
@@ -71,7 +77,6 @@ export default function CreateChatRoom() {
       }
     );
   };
-  console.log(selectedUsers.length);
 
   return (
     <div className=" w-full h-full flex flex-col">
@@ -175,12 +180,12 @@ export default function CreateChatRoom() {
               <div className="p-2 text-gray-500 text-sm">No users found</div>
             )}
           </div>
-        ) : selectedUsers.length > 1 ? (
-          // selectedUsers.map((user) => {
-          //   return `${user.firstname} ${user.lastname}`;
-          // })
+        ) : selectedUsers.length > 1 && loggedUser ? (
           <div className="flex-1">
-            <GroupChatRoomTemplate />
+            <GroupChatRoomTemplate
+              selectedUsers={[...selectedUsers, loggedUser]}
+              isCreateMessageOpen={isCreateMessageOpen}
+            />
           </div>
         ) : (
           ""

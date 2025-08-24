@@ -1,4 +1,4 @@
-import { UsersDataProps } from "./users.interface";
+import { SelectedUserDataProps, UsersDataProps } from "./users.interface";
 
 export interface ConversationDataProps {
   name: string;
@@ -18,6 +18,19 @@ export interface ConversationMessagesDataProps {
 export interface DirectConversationDataProps {
   userdAId: string;
   userBId: string;
+}
+
+export interface GroupConversationDataProps {
+  users: SelectedUserDataProps[];
+  type: string;
+}
+
+export interface ResponseGroupConversationDataProps {
+  id: string;
+  userId: string;
+  conversationId: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface ResponseConversationDataProps {

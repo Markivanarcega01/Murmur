@@ -1,15 +1,16 @@
 import { useState, useMemo, useEffect } from "react";
-import { GetMessagesProps } from "../../../interface/messages.interface";
 import { conversationParticipantsService } from "../../../services/conversation-participants.service";
 import { messageService } from "../../../services/message.service";
 import { userService } from "../../../services/user.service";
+import { useMyState } from "../../../context/selectedContext";
 
 const { getUser } = userService();
 const { getMessages } = messageService();
 const { getParticipantConversations } = conversationParticipantsService();
 
 export const useMessage = () => {
-  const [selected, setSelected] = useState<GetMessagesProps>("");
+  const { selected, setSelected } = useMyState();
+  //const [selected, setSelected] = useState<GetMessagesProps>("");
   const [isCreateMessageOpen, setIsCreateMessageOpen] = useState(false);
   {
     /** Fetch User */

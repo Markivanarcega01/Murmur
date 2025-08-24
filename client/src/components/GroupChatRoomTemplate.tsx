@@ -3,25 +3,64 @@ import ImageIcon from "@mui/icons-material/Image";
 import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions";
 import GifIcon from "@mui/icons-material/Gif";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
-import React from "react";
+import React, { SetStateAction } from "react";
 import { messageService } from "../services/message.service";
 import ChatBlock from "./ChatBlock";
+import {
+  SelectedUserDataProps,
+  UsersDataProps,
+} from "../interface/users.interface";
+import { conversationService } from "../services/conversation.service";
+import { ResponseGroupConversationDataProps } from "../interface/conversations.interface";
+import { useMyState } from "../context/selectedContext";
 
 const { createMessage } = messageService();
+const { createGroupConversation } = conversationService();
 
-const GroupChatRoomTemplate = ({}: {}) => {
+const GroupChatRoomTemplate = ({
+  selectedUsers,
+  isCreateMessageOpen,
+}: {
+  selectedUsers: UsersDataProps[];
+  isCreateMessageOpen: React.Dispatch<SetStateAction<boolean>>;
+}) => {
+  const { setSelected } = useMyState();
   const [message, setMessage] = React.useState("");
   const userMessage = createMessage();
-  const handleMessage = (e: React.FormEvent) => {
-    e.preventDefault();
+  const groupConversation = createGroupConversation();
+  const handleGroupConversation = (
+    //how can I get the return of this function
+    users: SelectedUserDataProps[],
+    type: string
+  ): Promise<ResponseGroupConversationDataProps[]> => {
+    return groupConversation.mutateAsync({
+      users,
+      type,
+    });
   };
+  const handleMessage = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const groupConversationResponse = await handleGroupConversation(
+      selectedUsers,
+      "group"
+    );
+    console.log("group convo res", groupConversationResponse);
+    userMessage.mutateAsync({
+      text: message,
+      conversationId: groupConversationResponse[0].conversationId,
+    });
+    isCreateMessageOpen(false);
+    setSelected(groupConversationResponse[0].conversationId);
+  };
+
   return (
-    <div className="flex flex-col flex-1 bg-violet-500 h-full">
+    <div className="flex flex-col flex-1 h-full">
       <div className="mt-10 self-center">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni,
-        voluptates.
+        {selectedUsers
+          .map((user) => `${user.firstname} ${user.lastname}`)
+          .join(", ")}
       </div>
-      <div className="flex-1 overflow-auto px-2 bg-red-500">
+      <div className="flex-1 overflow-auto px-2">
         <ChatBlock />
       </div>
       <div className="p-2 flex flex-row gap-x-3 items-center">

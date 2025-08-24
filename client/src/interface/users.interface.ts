@@ -17,3 +17,7 @@ export interface UserLoginDataProps {
   username: string;
   password: string;
 }
+
+export interface SelectedUserDataProps {
+  id: string;
+}
