@@ -14,27 +14,87 @@ import { UsersDataProps } from "../interface/users.interface";
 import { ConversationMessagesDataProps } from "../interface/conversations.interface";
 import React from "react";
 import { messageService } from "../services/message.service";
+import { io, Socket } from "socket.io-client";
 
 const { createMessage } = messageService();
 
 export default function ChatRoomMessages({
   participantConversationsSelectedValue,
   loggedUser,
-  messages,
+  messages: initialMessages,
 }: {
   participantConversationsSelectedValue: ParticipantConversationsDataProps;
   loggedUser: UsersDataProps;
   messages: ConversationMessagesDataProps[];
 }) {
+  const socketRef = React.useRef<Socket | null>(null);
   const userMessage = createMessage();
   const [message, setMessage] = React.useState("");
+  const [messages, setMessages] = React.useState(initialMessages);
+  const roomId = String(participantConversationsSelectedValue.id);
+  const listRef = React.useRef<HTMLDivElement | null>(null);
+
+  React.useEffect(() => {
+    const url = import.meta.env.VITE_SOCKET_URL ?? "http://localhost:3000";
+    const s = io(url, {
+      // optional: transports: ["websocket"],
+      // optional: auth: { token: yourToken },
+    });
+    socketRef.current = s;
+
+    return () => {
+      s.disconnect(); // removes all listeners too
+      socketRef.current = null;
+    };
+  }, []);
+
+  React.useEffect(() => {
+    setMessages(initialMessages);
+  }, [initialMessages, roomId]);
+
+  React.useEffect(() => {
+    if (!socketRef.current) return;
+
+    const s = socketRef.current;
+    s.emit("joinRoom", roomId);
+
+    const onReceive = (data: {
+      sender: string;
+      message: string;
+      createdAt?: string;
+    }) => {
+      console.log("emit", data);
+      // Append incoming message to UI
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: `temp-${Date.now()}`, // temp id for UI
+          text: data.message,
+          createdAt: data.createdAt ?? new Date().toISOString(),
+          User: { username: data.sender, firstname: data.sender }, // adapt to your shape
+        } as ConversationMessagesDataProps,
+      ]);
+    };
+
+    s.on("receiveMessage", onReceive);
+
+    // Cleanup: leave room listener to avoid duplicates next time
+    return () => {
+      s.off("receiveMessage", onReceive);
+      // You can optionally leave the room:
+      // s.emit("leaveRoom", roomId);
+    };
+  }, [roomId]);
+
   const handleMessage = (e: React.FormEvent) => {
     e.preventDefault();
+    const s = socketRef.current;
+    if (!s || !message.trim()) return;
 
     userMessage.mutate(
       {
         text: message,
-        conversationId: participantConversationsSelectedValue.id,
+        conversationId: roomId,
       },
       {
         onError: (error: any) => {
@@ -42,7 +102,48 @@ export default function ChatRoomMessages({
         },
       }
     );
+
+    // Optimistic UI update
+    setMessages((prev) => [
+      ...prev,
+      {
+        id: `local-${Date.now()}`,
+        text: message,
+        createdAt: new Date().toISOString(),
+        User: {
+          username: loggedUser.username,
+          firstname: loggedUser.firstname,
+        },
+      } as ConversationMessagesDataProps,
+    ]);
+
+    // Emit to room
+    s.emit("sendMessage", {
+      roomName: roomId,
+      message,
+      senderName: `${loggedUser.firstname}`,
+    });
+
+    setMessage("");
   };
+
+  // Jump to bottom on first render
+  React.useEffect(() => {
+    const el = listRef.current;
+    if (!el) return;
+    el.scrollTop = el.scrollHeight;
+  }, []);
+
+  // Optional: keep sticking to bottom when new messages arrive
+  React.useEffect(() => {
+    const el = listRef.current;
+    if (!el) return;
+
+    // Only auto-stick if user is already near the bottom
+    const nearBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 100;
+    if (nearBottom) el.scrollTop = el.scrollHeight;
+  }, [messages.length]); // or [messages]
+
   return (
     <div className="basis-3/4 border-x flex flex-col flex-1">
       {/** Conversation Heading Section */}
@@ -76,7 +177,7 @@ export default function ChatRoomMessages({
         </div>
       </div>
       {/** Conversation Content Section */}
-      <div className="flex-1 overflow-auto px-2">
+      <div ref={listRef} className="flex-1 overflow-auto px-2">
         <ChatBlock conversationMessages={messages} loggedUser={loggedUser} />
       </div>
       {/** Conversation Create Message Section */}
