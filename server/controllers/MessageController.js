@@ -33,6 +33,7 @@ const showMessages = async (req, res) => {
         { model: User, attributes: ["username", "firstname", "lastname"] },
         { model: Conversation, attributes: ["name"] },
       ],
+      order: ["createdAt"],
     });
     return res.status(200).json(messages);
   } catch (error) {

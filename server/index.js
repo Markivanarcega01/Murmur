@@ -23,7 +23,19 @@ app.use(express.json());
 io.on("connection", (socket) => {
   console.log("client connected:", socket.id);
 
-  socket.join("clock-room");
+  socket.on("joinRoom", (roomName) => {
+    socket.join(roomName);
+    console.log(`${socket.id} joined room: ${roomName}`);
+
+    socket.to(roomName).emit("userJoined", `${socket.id} joined the room`);
+  });
+
+  socket.on("sendMessage", ({ roomName, message, senderName }) => {
+    io.to(roomName).emit("receiveMessage", {
+      sender: senderName,
+      message,
+    });
+  });
 
   socket.on("disconnect", (reason) => {
     console.log(reason);
