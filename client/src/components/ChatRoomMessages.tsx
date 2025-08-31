@@ -33,7 +33,6 @@ export default function ChatRoomMessages({
   const [messages, setMessages] = React.useState(initialMessages);
   const roomId = String(participantConversationsSelectedValue.id);
   const listRef = React.useRef<HTMLDivElement | null>(null);
-
   React.useEffect(() => {
     const url = import.meta.env.VITE_SOCKET_URL ?? "http://localhost:3000";
     const s = io(url, {
@@ -132,7 +131,7 @@ export default function ChatRoomMessages({
     const el = listRef.current;
     if (!el) return;
     el.scrollTop = el.scrollHeight;
-  }, []);
+  }, [messages]);
 
   // Optional: keep sticking to bottom when new messages arrive
   React.useEffect(() => {
@@ -145,7 +144,7 @@ export default function ChatRoomMessages({
   }, [messages.length]); // or [messages]
 
   return (
-    <div className="basis-3/4 border-x flex flex-col flex-1">
+    <div className="basis-3/4 border-x flex flex-col flex-1 min-h-0">
       {/** Conversation Heading Section */}
       <div className="border-b flex justify-between items-center">
         <div className="w-fit">
@@ -177,7 +176,7 @@ export default function ChatRoomMessages({
         </div>
       </div>
       {/** Conversation Content Section */}
-      <div ref={listRef} className="flex-1 overflow-auto px-2">
+      <div ref={listRef} className="flex-1 min-h-0 px-2 overflow-auto">
         <ChatBlock conversationMessages={messages} loggedUser={loggedUser} />
       </div>
       {/** Conversation Create Message Section */}

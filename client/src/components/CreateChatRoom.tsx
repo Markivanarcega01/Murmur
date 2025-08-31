@@ -79,7 +79,7 @@ export default function CreateChatRoom({
   };
 
   return (
-    <div className=" w-full h-full flex flex-col">
+    <div className="w-full h-full flex flex-col min-h-0">
       {/* Input with chips */}
       <div
         className={`relative w-full flex flex-col ${
