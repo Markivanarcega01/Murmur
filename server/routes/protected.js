@@ -1,8 +1,31 @@
-const express = require("express")
-const router = express.Router()
-const {showMessages, createMessage, updateMessage, destroyMessage } = require('../controllers/MessageController')
-const {showConversations, createConversation, updateConvesation, deleteConversation} = require("../controllers/ConversationController");
-const { showConversationParticipants, createConversationParticipants, updateConversationParticipants, deleteConversationParticipants, findConversationParticipants } = require("../controllers/ConversationParticipantController");
+const express = require("express");
+const router = express.Router();
+const {
+  showMessages,
+  createMessage,
+  updateMessage,
+  destroyMessage,
+} = require("../controllers/MessageController");
+const {
+  showConversations,
+  createConversation,
+  updateConvesation,
+  deleteConversation,
+  createDirectConversation,
+} = require("../controllers/ConversationController");
+const {
+  showConversationParticipants,
+  createConversationParticipants,
+  updateConversationParticipants,
+  deleteConversationParticipants,
+  findConversationParticipants,
+  showParticipantConversations,
+} = require("../controllers/ConversationParticipantController");
+const { getUsers, getUser } = require("../controllers/UserController");
+
+//Users Routes
+router.get("/get-users", getUsers);
+router.get("/get-user", getUser);
 
 //Messages Routes
 router.get("/show-messages/:id", showMessages);
@@ -11,16 +34,27 @@ router.put("/update-message", updateMessage);
 router.delete("/delete-message/:id", destroyMessage);
 
 //Conversation Routes
-router.get("/show-conversations", showConversations)
-router.post("/create-conversation", createConversation)
-router.put("/update-conversation", updateConvesation)
-router.delete("/delete-conversation/:id", deleteConversation)
+router.get("/show-conversations", showConversations);
+router.post("/create-conversation", createConversation);
+router.post("/create-direct-conversation", createDirectConversation)
+router.put("/update-conversation", updateConvesation);
+router.delete("/delete-conversation/:id", deleteConversation);
 
 //Conversation Participants Routes
 router.get("/show-conversation-participants", showConversationParticipants);
-router.get("/find-conversation-participants/:conversationId", findConversationParticipants);
-router.post("/create-conversation-participants", createConversationParticipants)
+router.get(
+  "/find-conversation-participants/:conversationId",
+  findConversationParticipants
+);
+router.get("/show-participant-conversations", showParticipantConversations);
+router.post(
+  "/create-conversation-participants",
+  createConversationParticipants
+);
 router.put("/update-conversation-participant", updateConversationParticipants);
-router.delete("/delete-conversation-participant/:id", deleteConversationParticipants);
+router.delete(
+  "/delete-conversation-participant/:id",
+  deleteConversationParticipants
+);
 
-module.exports = router
+module.exports = router;

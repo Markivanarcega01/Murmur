@@ -24,3 +24,5 @@ Middleware:
 2. No duplicate userId when associated with conversation
 
 When sending a message to a user, this creates a conversation instance, conversationParticipants instance and message instance
+
+Database: Add column to Conversation: Group photo, Add column to Users: Profile_Picture
