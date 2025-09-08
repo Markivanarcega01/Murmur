@@ -21,3 +21,13 @@ export interface UserLoginDataProps {
 export interface SelectedUserDataProps {
   id: string;
 }
+
+export interface UserRegistrationDataProps {
+  username: string;
+  email: string;
+  password: string;
+  firstname: string;
+  lastname: string;
+  gender: string;
+  birthday: string;
+}

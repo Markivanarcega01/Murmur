@@ -1,4 +1,7 @@
-import { UserLoginDataProps } from "../interface/users.interface";
+import {
+  UserLoginDataProps,
+  UserRegistrationDataProps,
+} from "../interface/users.interface";
 import axios from "axios";
 
 export const usersApi = () => {
@@ -25,17 +28,7 @@ export const usersApi = () => {
     return response.data;
   };
 
-  const loginUsersApi = async (credentials: UserLoginDataProps) => {
-    // const response = await fetch("http://127.0.0.1:3000/auth/login", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify({
-    //     username: credentials.username,
-    //     password: credentials.password,
-    //   }),
-    // });
+  const loginUserApi = async (credentials: UserLoginDataProps) => {
     const response = await axios.post("http://127.0.0.1:3000/auth/login", {
       username: credentials.username,
       password: credentials.password,
@@ -44,5 +37,18 @@ export const usersApi = () => {
     return response.data;
   };
 
-  return { getUsersApi, loginUsersApi, getUserApi };
+  const registerUserApi = async (credentials: UserRegistrationDataProps) => {
+    const response = await axios.post("http://127.0.0.1:3000/auth/register", {
+      username: credentials.username,
+      email: credentials.email,
+      password: credentials.password,
+      firstname: credentials.firstname,
+      lastname: credentials.lastname,
+      gender: credentials.gender,
+      birthday: credentials.birthday,
+    });
+    return response.data;
+  };
+
+  return { getUsersApi, loginUserApi, registerUserApi, getUserApi };
 };

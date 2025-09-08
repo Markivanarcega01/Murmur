@@ -63,7 +63,7 @@ function Login() {
             <Grid2 size={12}>
               <TextField
                 id="login-email"
-                label="Email or phone number"
+                label="Email or Username"
                 variant="outlined"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}

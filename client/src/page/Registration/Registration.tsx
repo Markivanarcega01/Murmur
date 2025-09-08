@@ -12,16 +12,25 @@ import { useRegistration } from "./Hook/useRegistration";
 
 function Registration() {
   const {
-    selected,
+    days,
+    yearsDynamic,
+    firstName,
+    lastName,
+    gender,
     isValidPhoneNumber,
     phoneNumber,
     password,
-    handleRadioChange,
+    birthday,
+    setPart,
+    handleFirstNameChange,
+    handleLastNameChange,
+    handleGenderChange,
     handlePhoneNumberChange,
     handlePasswordChange,
+    handleRegistration,
   } = useRegistration();
   return (
-    <>
+    <form onSubmit={handleRegistration}>
       <div className="flex flex-col items-center bg-slate-200 h-screen pt-10">
         <Typography variant="h3" fontWeight={"bold"} color="primary">
           Murmur
@@ -60,6 +69,8 @@ function Registration() {
               label="First name"
               variant="outlined"
               size="small"
+              value={firstName}
+              onChange={handleFirstNameChange}
             />
           </Grid2>
           <Grid2 size={6}>
@@ -68,6 +79,8 @@ function Registration() {
               label="Last name"
               variant="outlined"
               size="small"
+              value={lastName}
+              onChange={handleLastNameChange}
             />
           </Grid2>
           <Grid2 size={12}>
@@ -81,6 +94,8 @@ function Registration() {
                 <MenuItemComponent
                   id="register-month"
                   menuName="Month"
+                  value={birthday.month}
+                  onChange={setPart("month")}
                   options={[
                     "Jan",
                     "Feb",
@@ -101,14 +116,18 @@ function Registration() {
                 <MenuItemComponent
                   id="register-day"
                   menuName="Day"
-                  options={["1", "2", "3", "4", "5"]}
+                  options={days}
+                  value={birthday.day}
+                  onChange={setPart("day")}
                 ></MenuItemComponent>
               </Grid2>
               <Grid2 size={4}>
                 <MenuItemComponent
                   id="register-year"
                   menuName="Year"
-                  options={["2000", "2001", "2002", "2003", "2004"]}
+                  options={yearsDynamic}
+                  value={birthday.year}
+                  onChange={setPart("year")}
                 ></MenuItemComponent>
               </Grid2>
             </Grid2>
@@ -123,8 +142,8 @@ function Registration() {
               <Grid2 size={4}>
                 <label>
                   <Radio
-                    checked={selected === "Male"}
-                    onChange={handleRadioChange}
+                    checked={gender === "Male"}
+                    onChange={handleGenderChange}
                     value="Male"
                   />
                   Male
@@ -133,8 +152,8 @@ function Registration() {
               <Grid2 size={4}>
                 <label>
                   <Radio
-                    checked={selected === "Female"}
-                    onChange={handleRadioChange}
+                    checked={gender === "Female"}
+                    onChange={handleGenderChange}
                     value="Female"
                   />
                   Female
@@ -165,7 +184,7 @@ function Registration() {
             />
           </Grid2>
           <Grid2 size={12}>
-            <Button variant="contained" fullWidth color="success">
+            <Button type="submit" variant="contained" fullWidth color="success">
               Signup
             </Button>
           </Grid2>
@@ -180,7 +199,7 @@ function Registration() {
           </Grid2>
         </Grid2>
       </div>
-    </>
+    </form>
   );
 }
 

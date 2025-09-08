@@ -39,6 +39,14 @@ User.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    gender: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    birthday: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
   },
   {
     sequelize,
@@ -66,7 +74,8 @@ User.findUser = async (username) => {
 
 User.createUser = async (credentials) => {
   try {
-    const { username, password, email, firstname, lastname } = credentials;
+    const { username, password, email, firstname, lastname, gender, birthday } =
+      credentials;
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const isUserExists = await User.findOne({
@@ -83,6 +92,8 @@ User.createUser = async (credentials) => {
       email: email,
       firstname: firstname,
       lastname: lastname,
+      gender: gender,
+      birthday: birthday,
     });
     return user;
   } catch (error) {

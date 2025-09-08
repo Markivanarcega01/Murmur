@@ -4,7 +4,7 @@ import { USER_QUERYKEY } from "../shared/const/user.querykeys";
 import { usersApi } from "../api/users.api";
 import { AxiosError } from "axios";
 
-const { getUsersApi, loginUsersApi, getUserApi } = usersApi();
+const { getUsersApi, loginUserApi, getUserApi, registerUserApi } = usersApi();
 
 export const userService = () => {
   const getUsers = () => {
@@ -25,9 +25,16 @@ export const userService = () => {
   const loginUser = () => {
     return useMutation({
       mutationKey: [USER_QUERYKEY.login],
-      mutationFn: loginUsersApi,
+      mutationFn: loginUserApi,
     });
   };
 
-  return { getUsers, loginUser, getUser };
+  const registerUser = () => {
+    return useMutation({
+      mutationKey: [USER_QUERYKEY.register],
+      mutationFn: registerUserApi,
+    });
+  };
+
+  return { getUsers, loginUser, registerUser, getUser };
 };
