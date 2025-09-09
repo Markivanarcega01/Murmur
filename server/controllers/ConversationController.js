@@ -27,7 +27,7 @@ const createDirectConversation = async (req, res) => {
                               FROM conversation_participants cp
                               WHERE cp.userId IN ('${userAId}', '${userBId}')
                               GROUP BY cp.conversationId
-                              HAVING COUNT(DISTINCT cp.userId) = 2
+                              HAVING COUNT(cp.userId) = 2
                           )`),
           },
           type: "direct",
