@@ -24,7 +24,7 @@ const GroupChatRoomTemplate = ({
   selectedUsers: UsersDataProps[];
   isCreateMessageOpen: React.Dispatch<SetStateAction<boolean>>;
 }) => {
-  const { setSelected } = useMyState();
+  const { setSelected, loggedUser } = useMyState();
   const [message, setMessage] = React.useState("");
   const userMessage = createMessage();
   const groupConversation = createGroupConversation();
@@ -40,6 +40,10 @@ const GroupChatRoomTemplate = ({
   };
   const handleMessage = async (e: React.FormEvent) => {
     e.preventDefault();
+    const isLoggedUserInSelectedUsers = selectedUsers.includes(loggedUser);
+    if (!isLoggedUserInSelectedUsers) {
+      selectedUsers.push(loggedUser);
+    }
     const groupConversationResponse = await handleGroupConversation(
       selectedUsers,
       "group"

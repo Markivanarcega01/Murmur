@@ -19,7 +19,7 @@ export default function CreateChatRoom({
   isCreateMessageOpen: React.Dispatch<SetStateAction<boolean>>;
 }) {
   const { data: users, isLoading: isUsersLoading } = getUsers();
-
+  const { setSelected, loggedUser } = useMyState();
   const [isFocused, setIsFocused] = React.useState(false);
   const [userSearch, setUserSearch] = React.useState("");
   const directConversation = createDirectConversation();
@@ -51,13 +51,10 @@ export default function CreateChatRoom({
   // }
 
   const {
-    loggedUser,
     participantConversationsSelectedValue,
     messages,
     participantConversations,
   } = useMessage();
-
-  const { setSelected } = useMyState();
 
   const handleDirectConversation = (
     userSenderId: string,
@@ -183,7 +180,7 @@ export default function CreateChatRoom({
         ) : selectedUsers.length > 1 && loggedUser ? (
           <div className="flex-1">
             <GroupChatRoomTemplate
-              selectedUsers={[...selectedUsers, loggedUser]}
+              selectedUsers={[...selectedUsers]}
               isCreateMessageOpen={isCreateMessageOpen}
             />
           </div>
